@@ -1,0 +1,62 @@
+"""
+This code is based on the Torchvision repository, which was licensed under the BSD 3-Clause.
+"""
+import os
+import pickle
+import sys
+import numpy as np
+import torch
+from PIL import Image
+from torch.utils.data import Dataset
+from utils.mypath import MyPath
+import json
+import sys
+sys.path.append('/home/qing/Desktop/Closed-Loop-Learning/CLL-NeSy/data')
+from domain import SYMBOLS, SYM2ID
+
+from torchvision import transforms
+
+class HINT(Dataset):
+    """ The HINT dataset
+    Args:
+        root (string): Root directory of dataset where directory
+        train (bool, optional): If True, creates dataset from training set, otherwise
+            creates from test set.
+        transform (callable, optional): A function/transform that takes in an PIL image
+            and returns a transformed version. E.g, ``transforms.RandomCrop``
+    """
+
+    def __init__(self, root=MyPath.db_root_dir('hint'), split='train', transform=None):
+
+        super(HINT, self).__init__()
+        self.root = root
+        self.img_dir = root + 'symbol_images/'
+        self.transform = transform
+        self.classes = SYMBOLS
+        self.split = split
+
+        dataset = json.load(open(root + 'expr_%s.json'%split))
+        dataset = [(x,SYM2ID(y)) for sample in dataset for x, y in zip(sample['img_paths'], sample['expr'])]
+        dataset = list(set(dataset))
+        self.dataset = dataset
+
+    def __getitem__(self, index):
+        sample = self.dataset[index]
+        img_path, target = sample
+        img = Image.open(self.img_dir+img_path).convert('L')
+        img = transforms.functional.resize(img, 32)
+        img_size = img.size
+        class_name = self.classes[target]        
+
+        if self.transform is not None:
+            img = self.transform(img)
+
+        out = {'image': img, 'target': target, 'meta': {'im_size': img_size, 'index': index, 'class_name': class_name}}
+        
+        return out
+        
+    def __len__(self):
+        return len(self.dataset)
+
+    def extra_repr(self):
+        return "Split: {}".format(self.split)
