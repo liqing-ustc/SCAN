@@ -5,7 +5,6 @@
 
 export DATASET=hint
 export OUTPUT=outputs/$DATASET
-python simclr.py --config_env configs/env.yml --config_exp configs/pretext/simclr_$DATASET.yml
-# python simclr.py --config_env configs/env.yml --config_exp configs/pretext/simclr_$DATASET.yml >$OUTPUT/pretext.log
-# python scan.py --config_env configs/env.yml --config_exp configs/scan/scan_$DATASET.yml >$OUTPUT/scan.log
-# python selflabel.py --config_env configs/env.yml --config_exp configs/selflabel/selflabel_$DATASET.yml >$OUTPUT/selflabel.log
+python simclr.py --config_env configs/env.yml --config_exp configs/pretext/simclr_$DATASET.yml >$OUTPUT/pretext.log
+python scan.py --config_env configs/env.yml --config_exp configs/scan/scan_$DATASET.yml >$OUTPUT/scan.log
+python selflabel.py --config_env configs/env.yml --config_exp configs/selflabel/selflabel_$DATASET.yml >$OUTPUT/selflabel.log

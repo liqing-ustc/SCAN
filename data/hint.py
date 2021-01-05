@@ -6,13 +6,14 @@ import pickle
 import sys
 import numpy as np
 import torch
-from PIL import Image
+from PIL import Image, ImageOps
 from torch.utils.data import Dataset
 from utils.mypath import MyPath
 import json
 import sys
 sys.path.append('/home/qing/Desktop/Closed-Loop-Learning/CLL-NeSy/data')
 from domain import SYMBOLS, SYM2ID
+from collections import Counter
 
 from torchvision import transforms
 
@@ -33,18 +34,22 @@ class HINT(Dataset):
         self.img_dir = root + 'symbol_images/'
         self.transform = transform
         self.classes = SYMBOLS
+
+        split = 'train'
         self.split = split
 
         dataset = json.load(open(root + 'expr_%s.json'%split))
+        dataset = [x for x in dataset if len(x['expr']) <= 15]
         dataset = [(x,SYM2ID(y)) for sample in dataset for x, y in zip(sample['img_paths'], sample['expr'])]
-        dataset = list(set(dataset))
+        print(sorted(Counter([x[1] for x in dataset]).items()))
         self.dataset = dataset
 
     def __getitem__(self, index):
         sample = self.dataset[index]
         img_path, target = sample
         img = Image.open(self.img_dir+img_path).convert('L')
-        img = transforms.functional.resize(img, 32)
+        img = ImageOps.invert(img)
+        # img = transforms.functional.resize(img, 32)
         img_size = img.size
         class_name = self.classes[target]        
 
