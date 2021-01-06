@@ -18,6 +18,8 @@ FLAGS.add_argument('--config_exp', help='Location of config file')
 FLAGS.add_argument('--model', help='Location where model is saved')
 FLAGS.add_argument('--visualize_prototypes', action='store_true', 
                     help='Show the prototpye for each cluster')
+FLAGS.add_argument('--save_match', action='store_true', 
+                    help='whether to permute the model to match the ground-truth order and save it')
 args = FLAGS.parse_args()
 
 def main():
@@ -86,6 +88,13 @@ def main():
         clustering_stats = hungarian_evaluate(head, predictions, dataset.classes, 
                                                 compute_confusion_matrix=True)
         print(clustering_stats)
+        if args.save_match:
+            match = clustering_stats['hungarian_match']
+            state_dict = model.state_dict()
+            match = [i for i,j in sorted(match, key=lambda x: x[1])]
+            state_dict['cluster_head.0.weight'] = state_dict['cluster_head.0.weight'][match]
+            state_dict['cluster_head.0.bias'] = state_dict['cluster_head.0.bias'][match]
+            torch.save(state_dict, args.model + '_match')
         if args.visualize_prototypes:
             prototype_indices = get_prototypes(config, predictions[head], features, model)
             visualize_indices(prototype_indices, dataset, clustering_stats['hungarian_match'])

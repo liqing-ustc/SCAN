@@ -49,7 +49,7 @@ class HINT(Dataset):
         img_path, target = sample
         img = Image.open(self.img_dir+img_path).convert('L')
         img = ImageOps.invert(img)
-        # img = transforms.functional.resize(img, 32)
+        img = transforms.functional.resize(img, 32)
         img_size = img.size
         class_name = self.classes[target]        
 
@@ -62,6 +62,13 @@ class HINT(Dataset):
         
     def __len__(self):
         return len(self.dataset)
+
+    def get_image(self, index):
+        sample = self.dataset[index]
+        img_path, target = sample
+        img = Image.open(self.img_dir+img_path).convert('L')
+        img = ImageOps.invert(img)
+        return img
 
     def extra_repr(self):
         return "Split: {}".format(self.split)
