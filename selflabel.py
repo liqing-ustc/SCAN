@@ -109,6 +109,7 @@ def main():
         torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(), 
                     'epoch': epoch + 1}, p['selflabel_checkpoint'])
         torch.save(model.module.state_dict(), p['selflabel_model'])
+        torch.save(model.module.state_dict(), "%s_%d"%(p['selflabel_model'], clustering_stats['ACC'] * 100))
     
     # Evaluate and save the final model
     print(colored('Evaluate model at the end', 'blue'))
