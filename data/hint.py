@@ -49,7 +49,7 @@ class HINT(Dataset):
         img_path, target = sample
         img = Image.open(self.img_dir+img_path).convert('L')
         img = ImageOps.invert(img)
-        img = transforms.functional.resize(img, 32)
+        # img = transforms.functional.resize(img, 32)
         img_size = img.size
         class_name = self.classes[target]        
 
