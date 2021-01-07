@@ -35,7 +35,6 @@ class HINT(Dataset):
         self.transform = transform
         self.classes = SYMBOLS
 
-        split = 'train'
         self.split = split
 
         dataset = json.load(open(root + 'expr_%s.json'%split))
@@ -49,7 +48,7 @@ class HINT(Dataset):
         img_path, target = sample
         img = Image.open(self.img_dir+img_path).convert('L')
         img = ImageOps.invert(img)
-        # img = transforms.functional.resize(img, 32)
+        img = transforms.functional.resize(img, 32)
         img_size = img.size
         class_name = self.classes[target]        
 
