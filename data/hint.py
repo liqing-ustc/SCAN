@@ -35,6 +35,7 @@ class HINT(Dataset):
         self.transform = transform
         self.classes = SYMBOLS
 
+        split = 'train'
         self.split = split
 
         dataset = json.load(open(root + 'expr_%s.json'%split))
