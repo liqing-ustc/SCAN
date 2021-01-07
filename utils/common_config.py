@@ -241,16 +241,21 @@ def get_train_transformations(p):
     
     elif p['augmentation_strategy'] == 'ours':
         # Augmentation strategy from our paper 
-        return transforms.Compose([
+        if 'crop_size' in p['augmentation_kwargs']:
+            crop = transforms.RandomCrop(p['augmentation_kwargs']['crop_size'])
+        elif 'random_resized_crop' in p['augmentation_kwargs']:
+            crop = transforms.RandomResizedCrop(**p['augmentation_kwargs']['random_resized_crop'])
+        transforms_list = [
+            crop,
             transforms.RandomHorizontalFlip(),
-            transforms.RandomCrop(p['augmentation_kwargs']['crop_size']),
             Augment(p['augmentation_kwargs']['num_strong_augs']),
             transforms.ToTensor(),
             transforms.Normalize(**p['augmentation_kwargs']['normalize']),
             Cutout(
                 n_holes = p['augmentation_kwargs']['cutout_kwargs']['n_holes'],
                 length = p['augmentation_kwargs']['cutout_kwargs']['length'],
-                random = p['augmentation_kwargs']['cutout_kwargs']['random'])])
+                random = p['augmentation_kwargs']['cutout_kwargs']['random'])]
+        return transforms.Compose(transforms_list)
     
     else:
         raise ValueError('Invalid augmentation strategy {}'.format(p['augmentation_strategy']))
