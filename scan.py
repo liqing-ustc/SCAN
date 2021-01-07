@@ -116,7 +116,7 @@ def main():
             print('Lowest loss head is %d' %(best_loss_head))
 
         print('Evaluate with hungarian matching algorithm ...')
-        clustering_stats = hungarian_evaluate(lowest_loss_head, predictions, compute_confusion_matrix=True)
+        clustering_stats = hungarian_evaluate(lowest_loss_head, predictions, val_dataset.classes, compute_confusion_matrix=True)
         print(clustering_stats)     
 
         # Checkpoint
