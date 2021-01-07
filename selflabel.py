@@ -101,7 +101,7 @@ def main():
         # Evaluate (To monitor progress - Not for validation)
         print('Evaluate ...')
         predictions = get_predictions(p, val_dataloader, model)
-        clustering_stats = hungarian_evaluate(0, predictions, val_dataset.classes, compute_confusion_matrix=True) 
+        clustering_stats = hungarian_evaluate(0, predictions, val_dataset.dataset.classes, compute_confusion_matrix=True) 
         print(clustering_stats)
         
         # Checkpoint
