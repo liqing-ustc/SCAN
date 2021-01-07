@@ -124,6 +124,7 @@ def main():
         torch.save({'optimizer': optimizer.state_dict(), 'model': model.state_dict(), 
                     'epoch': epoch + 1, 'best_loss': best_loss, 'best_loss_head': best_loss_head},
                      p['scan_checkpoint'])
+        torch.save(model.module.state_dict(), "%s_%d"%(p['scan_model'], clustering_stats['ACC'] * 100))
     
     # Evaluate and save the final model
     print(colored('Evaluate best model based on SCAN metric at the end', 'blue'))
