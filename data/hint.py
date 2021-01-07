@@ -11,7 +11,7 @@ from torch.utils.data import Dataset
 from utils.mypath import MyPath
 import json
 import sys
-sys.path.append('/home/qing/Desktop/Closed-Loop-Learning/CLL-NeSy/data')
+sys.path.append('../CLL-NeSy/data')
 from domain import SYMBOLS, SYM2ID
 from collections import Counter
 

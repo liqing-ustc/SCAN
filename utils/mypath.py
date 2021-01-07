@@ -24,7 +24,7 @@ class MyPath(object):
             return '/path/to/imagenet/'
 
         elif database == 'hint':
-            return '/home/qing/Desktop/Closed-Loop-Learning/CLL-NeSy/data/'
+            return '../CLL-NeSy/data/'
         
         else:
             raise NotImplementedError
