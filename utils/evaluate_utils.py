@@ -143,6 +143,9 @@ def hungarian_evaluate(subhead_index, all_predictions, class_names=None,
     acc = int((reordered_preds == targets).sum()) / float(num_elems)
     nmi = metrics.normalized_mutual_info_score(targets.cpu().numpy(), predictions.cpu().numpy())
     ari = metrics.adjusted_rand_score(targets.cpu().numpy(), predictions.cpu().numpy())
+
+    report = metrics.classification_report(gt, pred, target_names=class_names)
+    print(report)
     
     _, preds_top5 = probs.topk(5, 1, largest=True)
     reordered_preds_top5 = torch.zeros_like(preds_top5)
