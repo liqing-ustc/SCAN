@@ -6,6 +6,7 @@ import os
 import torch
 import numpy as np
 import errno
+np.set_printoptions(precision=2, suppress=True)
 
 def mkdir_if_missing(directory):
     if not os.path.exists(directory):
