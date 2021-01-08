@@ -52,8 +52,12 @@ class HINT(Dataset):
         for img, label in dataset:
             label2data[label].append((img, label))
         dataset = []
+        random.seed(777)
+        n_sample_per_class = 5000 if split == 'train' else 500
         for label, data in label2data.items():
-            dataset.extend(random.choices(data, k=5000))
+            dataset.extend(random.choices(data, k=n_sample_per_class))
+        random.shuffle(dataset)
+        print(dataset[:10])
 
         print(sorted(Counter([x[1] for x in dataset]).items()))
         self.dataset = dataset
