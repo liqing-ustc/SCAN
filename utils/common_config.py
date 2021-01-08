@@ -54,8 +54,8 @@ def get_model(p, pretrain_path=None):
             backbone = resnet18()
         
         elif p['train_db_name'] == 'hint':
-            from models.resnet_cifar import resnet18
-            backbone = resnet18(in_channel=1)
+            from models.lenet_hint import lenet
+            backbone = lenet()
         
         else:
             raise NotImplementedError
