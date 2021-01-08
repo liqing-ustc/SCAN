@@ -33,6 +33,8 @@ def get_criterion(p):
 
 def get_feature_dimensions_backbone(p):
     if p['backbone'] == 'resnet18':
+        if p['train_db_name'] == 'hint':
+            return 84
         return 512
 
     elif p['backbone'] == 'resnet50':
