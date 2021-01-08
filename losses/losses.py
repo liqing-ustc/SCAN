@@ -24,12 +24,13 @@ class MaskedCrossEntropyLoss(nn.Module):
 
 
 class ConfidenceBasedCE(nn.Module):
-    def __init__(self, threshold, apply_class_balancing):
+    def __init__(self, threshold, apply_class_balancing, entropy_weight=100.0):
         super(ConfidenceBasedCE, self).__init__()
         self.loss = MaskedCrossEntropyLoss()
         self.softmax = nn.Softmax(dim = 1)
         self.threshold = threshold    
         self.apply_class_balancing = apply_class_balancing
+        self.entropy_weight = entropy_weight
 
     def forward(self, anchors_weak, anchors_strong):
         """
@@ -60,9 +61,14 @@ class ConfidenceBasedCE(nn.Module):
             weight = None
         
         # Loss
-        loss = self.loss(input_, target, mask, weight = weight, reduction='mean') 
+        class_loss = self.loss(input_, target, mask, weight = weight, reduction='mean') 
+
+        # Entropy loss
+        entropy_loss = entropy(torch.mean(weak_anchors_prob, 0), input_as_probabilities = True)
+
+        total_loss = class_loss - self.entropy_weight * entropy_loss
         
-        return loss
+        return total_loss
 
 
 def entropy(x, input_as_probabilities):
