@@ -22,7 +22,8 @@ def get_criterion(p):
 
     elif p['criterion'] == 'confidence-cross-entropy':
         from losses.losses import ConfidenceBasedCE
-        criterion = ConfidenceBasedCE(p['confidence_threshold'], p['criterion_kwargs']['apply_class_balancing'])
+        entropy_weight = p['criterion_kwargs'].get('entropy_weight', 1.0)
+        criterion = ConfidenceBasedCE(p['confidence_threshold'], p['criterion_kwargs']['apply_class_balancing'], entropy_weight)
 
     else:
         raise ValueError('Invalid criterion {}'.format(p['criterion']))
