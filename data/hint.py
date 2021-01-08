@@ -16,6 +16,12 @@ from domain import SYMBOLS, SYM2ID
 from collections import Counter
 
 from torchvision import transforms
+def pad_image(img, desired_size, fill=0):
+    delta_w = desired_size - img.size[0]
+    delta_h = desired_size - img.size[1]
+    padding = (delta_w//2, delta_h//2, delta_w-(delta_w//2), delta_h-(delta_h//2))
+    new_img = ImageOps.expand(img, padding, fill)
+    return new_img
 
 class HINT(Dataset):
     """ The HINT dataset
@@ -49,7 +55,8 @@ class HINT(Dataset):
         img_path, target = sample
         img = Image.open(self.img_dir+img_path).convert('L')
         img = ImageOps.invert(img)
-        img = transforms.functional.resize(img, 32)
+        img = pad_image(img, 60)
+        img = transforms.functional.resize(img, 45)
         img_size = img.size
         class_name = self.classes[target]        
 
