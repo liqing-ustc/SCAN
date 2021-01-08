@@ -64,8 +64,7 @@ class ConfidenceBasedCE(nn.Module):
         class_loss = self.loss(input_, target, mask, weight = weight, reduction='mean') 
 
         # Entropy loss
-        strong_anchors_prob = self.softmax(anchors_strong) 
-        entropy_loss = entropy(torch.mean(weak_anchors_prob + strong_anchors_prob, 0), input_as_probabilities = True)
+        entropy_loss = entropy(torch.mean(weak_anchors_prob, 0), input_as_probabilities = True)
 
         total_loss = class_loss - self.entropy_weight * entropy_loss
         
