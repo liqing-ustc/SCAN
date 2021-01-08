@@ -75,8 +75,7 @@ def confusion_matrix(predictions, gt, class_names, output_file=None):
     # Plot confusion_matrix and store result to output_file
     import sklearn.metrics
     import matplotlib.pyplot as plt
-    confusion_matrix = sklearn.metrics.confusion_matrix(gt, predictions)
-    confusion_matrix = confusion_matrix / np.sum(confusion_matrix, 1)
+    confusion_matrix = sklearn.metrics.confusion_matrix(gt, predictions, normalize='pred')
     print(confusion_matrix)
     
     fig, axes = plt.subplots(1)
