@@ -14,6 +14,7 @@ import sys
 sys.path.append('../CLL-NeSy/data')
 from domain import SYMBOLS, SYM2ID
 from collections import Counter
+import random
 
 from torchvision import transforms
 def pad_image(img, desired_size, fill=0):
@@ -45,8 +46,15 @@ class HINT(Dataset):
         self.split = split
 
         dataset = json.load(open(root + 'expr_%s.json'%split))
-        dataset = [x for x in dataset if len(x['expr']) <= 15]
+        # dataset = [x for x in dataset if len(x['expr']) <= 15]
         dataset = [(x,SYM2ID(y)) for sample in dataset for x, y in zip(sample['img_paths'], sample['expr'])]
+        label2data = {i:[] for i in range(len(self.classes))}
+        for img, label in dataset:
+            label2data[label].append((img, label))
+        dataset = []
+        for label, data in label2data.items():
+            dataset.extend(random.choices(data, k=5000))
+
         print(sorted(Counter([x[1] for x in dataset]).items()))
         self.dataset = dataset
 
