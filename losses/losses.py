@@ -24,7 +24,7 @@ class MaskedCrossEntropyLoss(nn.Module):
 
 
 class ConfidenceBasedCE(nn.Module):
-    def __init__(self, threshold, apply_class_balancing, entropy_weight=100.0):
+    def __init__(self, threshold, apply_class_balancing, entropy_weight=0.0):
         super(ConfidenceBasedCE, self).__init__()
         self.loss = MaskedCrossEntropyLoss()
         self.softmax = nn.Softmax(dim = 1)
