@@ -200,7 +200,7 @@ def get_val_dataset(p, transform=None, to_neighbors_dataset=False):
     if to_neighbors_dataset: # Dataset returns an image and one of its nearest neighbors.
         from data.custom_dataset import NeighborsDataset
         indices = np.load(p['topk_neighbors_val_path'])
-        dataset = NeighborsDataset(dataset, indices, 5) # Only use 5
+        dataset = NeighborsDataset(dataset, indices, p['num_neighbors']) # Only use 5
 
     return dataset
 
