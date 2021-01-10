@@ -68,7 +68,7 @@ class HINT(Dataset):
         img = Image.open(self.img_dir+img_path).convert('L')
         img = ImageOps.invert(img)
         img = pad_image(img, 60)
-        img = transforms.functional.resize(img, 45)
+        img = transforms.functional.resize(img, 40)
         img_size = img.size
         class_name = self.classes[target]        
 
